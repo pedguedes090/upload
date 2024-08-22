@@ -6,6 +6,9 @@ import string
 import random
 
 app = Flask(__name__)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
