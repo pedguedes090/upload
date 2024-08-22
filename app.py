@@ -6,12 +6,11 @@ import string
 import random
 
 app = Flask(__name__)
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 HUGGING_FACE_TOKENS = [
     "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",
     "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",
@@ -24,13 +23,17 @@ DATASET_IDS = [
     "dunbot/filetempapi"
 ]
 URL_JSON_FILE = 'url.json'
+
 def generate_random_filename(extension):
     random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
     return f"{random_string}{extension}"
+
 def get_random_token():
     return random.choice(HUGGING_FACE_TOKENS)
+
 def get_random_dataset():
     return random.choice(DATASET_IDS)
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -59,6 +62,7 @@ def index():
                 return f"An error occurred: {str(e)}"    
     file_url = request.args.get('file_url')
     return render_template('index.html', file_url=file_url)
+
 @app.route('/api/upload', methods=['POST'])
 def api_upload():
     if 'file' not in request.files:
@@ -93,6 +97,7 @@ def upload_to_hf(api, file_path, filename, dataset_id):
             repo_id=dataset_id,
             repo_type="dataset"
         )
+
 def save_url_to_json(url):
     if os.path.exists(URL_JSON_FILE):
         with open(URL_JSON_FILE, 'r') as file:
@@ -102,5 +107,7 @@ def save_url_to_json(url):
     data.append(url)    
     with open(URL_JSON_FILE, 'w') as file:
         json.dump(data, file, indent=2)
+
+# Main entry point
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
