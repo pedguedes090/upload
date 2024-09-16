@@ -110,4 +110,4 @@ def save_url_to_json(url):
 
 # Main entry point
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=8787, debug=True)
